@@ -17,8 +17,10 @@ from torch import nn
 from models.mlp_nn import MLP
 from utils.data import get_dataloader
 from utils.evaluate import evaluate
+from utils.visualize import plot_training
 
-CHECKPOINT_PATH = "checkpoints/mlp_nn.pt"
+CHECKPOINT_PATH = "weights/mlp_nn.pt"
+PLOT_PATH = "plots/mlp_nn_training.png"
 
 
 def main():
@@ -39,6 +41,7 @@ def main():
 
     os.makedirs(os.path.dirname(CHECKPOINT_PATH), exist_ok=True)
     best_val_accuracy = 0.0
+    train_losses, val_losses, val_accuracies = [], [], []  # one entry per epoch, for the training plot
 
     for epoch in range(1, args.epochs + 1):
         model.train()  # put the model in training mode (matters for layers like dropout)
@@ -53,8 +56,11 @@ def main():
 
         avg_loss = total_loss / len(train_loader)
         model.eval()  # put the model in evaluation mode before measuring accuracy
-        val_accuracy = evaluate(model, val_loader)
-        print(f"Epoch {epoch:2d} | train loss {avg_loss:.4f} | val accuracy {val_accuracy:.2%}", end="")
+        val_accuracy, val_loss = evaluate(model, val_loader, loss_fn)
+        train_losses.append(avg_loss)
+        val_losses.append(val_loss)
+        val_accuracies.append(val_accuracy)
+        print(f"Epoch {epoch:2d} | train loss {avg_loss:.4f} | val loss {val_loss:.4f} | val accuracy {val_accuracy:.2%}", end="")
 
         # Accuracy jumps around from epoch to epoch, so the last epoch isn't always the best.
         # Keep the weights from whichever epoch did best on the validation set.
@@ -65,6 +71,7 @@ def main():
         print()
 
     print(f"Best val accuracy {best_val_accuracy:.2%}, weights saved to {CHECKPOINT_PATH}")
+    plot_training(train_losses, val_losses, val_accuracies, "torch.nn MLP training", PLOT_PATH)
 
 
 if __name__ == "__main__":

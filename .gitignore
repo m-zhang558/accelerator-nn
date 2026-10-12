@@ -2,7 +2,7 @@
 datasets/
 
 # Saved model weights
-checkpoints/
+weights/
 
 # Python
 __pycache__/

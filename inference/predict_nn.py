@@ -15,7 +15,7 @@ from utils.data import get_dataloader, get_dataset
 from utils.evaluate import evaluate
 from utils.visualize import show_predictions
 
-CHECKPOINT_PATH = "checkpoints/mlp_nn.pt"
+CHECKPOINT_PATH = "weights/mlp_nn.pt"
 
 
 def main():
@@ -30,7 +30,7 @@ def main():
     model.load_state_dict(torch.load(CHECKPOINT_PATH))
     model.eval()  # evaluation mode: we are predicting, not training
 
-    accuracy = evaluate(model, get_dataloader("test", batch_size=1000))
+    accuracy, _ = evaluate(model, get_dataloader("test", batch_size=1000))
     print(f"Test accuracy: {accuracy:.2%}")
 
     show_predictions(model, get_dataset("test"), args.num_images, args.mistakes, args.save)

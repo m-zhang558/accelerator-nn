@@ -38,7 +38,8 @@ utils/        code shared by everything above
   evaluate.py       measures accuracy
   visualize.py      plots predictions
 datasets/     MNIST is downloaded here (created automatically)
-checkpoints/  trained weights are saved here (created automatically)
+weights/      trained weights are saved here (created automatically)
+plots/        a training plot for each model: train/val loss and val accuracy per epoch
 ```
 
 ## The data
