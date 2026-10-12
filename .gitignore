@@ -1,0 +1,11 @@
+# Downloaded MNIST data
+datasets/
+
+# Saved model weights
+checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
